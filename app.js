@@ -40,6 +40,12 @@ function renderHome(){
   $("#totalWorkouts").textContent=total;$("#totalVolume").textContent=volume.toLocaleString("pt-BR")+" kg";$("#lastWorkout").textContent=total?fmtDate(data.history[0].date):"—";
   $("#recentList").innerHTML=data.history.slice(0,3).map(h=>`<div class="recent-item"><div><strong>${esc(h.name)}</strong><small>${fmtDate(h.date)} · ${h.exerciseCount} exercícios</small></div><strong>${Math.round(h.volume||0).toLocaleString("pt-BR")} kg</strong></div>`).join("")||'<div class="empty">Seus treinos concluídos aparecerão aqui.</div>';
 }
+// Delegação de clique dos botões Iniciar nos cartões da tela inicial.
+$("#workoutCards").addEventListener("click", e => {
+  const button = e.target.closest("[data-start]");
+  if (button) startWorkout(button.dataset.start);
+});
+
 function startWorkout(id){
   const w=data.workouts.find(x=>x.id===id);if(!w)return;
   current={id:w.id,name:w.name,exercises:w.exercises.map(e=>({...e,entries:Array.from({length:e.sets},()=>({weight:"",reps:String(e.reps),done:false}))}))};
