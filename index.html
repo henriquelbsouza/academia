@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101411">
+  <meta name="description" content="Seu diário de musculação, com treinos, cargas e evolução salvos no dispositivo.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Treino Forte</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">TF</span><div><strong>Treino Forte</strong><small>Seu diário de treino</small></div></div>
+    <button class="icon-btn" id="settingsBtn" aria-label="Configurações">⚙</button>
+  </header>
+
+  <main>
+    <section id="homeView" class="view active">
+      <div class="hero">
+        <div><p class="eyebrow">SEU PRÓXIMO TREINO</p><h1>Vamos treinar?</h1><p class="muted">Registre suas cargas e acompanhe sua evolução.</p></div>
+        <div class="hero-icon">🏋️</div>
+      </div>
+      <div class="section-heading"><h2>Meus treinos</h2><button class="text-btn" id="addWorkoutBtn">＋ Criar treino</button></div>
+      <div id="workoutCards" class="workout-grid"></div>
+      <div class="section-heading"><h2>Resumo</h2><span class="muted small">Seu histórico</span></div>
+      <div class="stats-grid">
+        <div class="stat-card"><span class="muted small">Treinos concluídos</span><strong id="totalWorkouts">0</strong></div>
+        <div class="stat-card"><span class="muted small">Volume total</span><strong id="totalVolume">0 kg</strong></div>
+        <div class="stat-card"><span class="muted small">Último treino</span><strong id="lastWorkout">—</strong></div>
+      </div>
+      <div class="section-heading"><h2>Treinos recentes</h2><button class="text-btn" data-view="historyView">Ver todos</button></div>
+      <div id="recentList" class="recent-list"></div>
+    </section>
+
+    <section id="sessionView" class="view">
+      <div class="session-head">
+        <button class="back-btn" id="cancelSession">←</button>
+        <div><p class="eyebrow" id="sessionLabel">TREINO A</p><h1 id="sessionTitle">Força geral</h1></div>
+        <div class="session-clock" id="elapsed">00:00</div>
+      </div>
+      <div class="session-progress"><div id="progressBar"></div></div>
+      <p class="muted small" id="progressText">0 de 0 séries concluídas</p>
+      <div id="sessionExercises"></div>
+      <button class="primary-btn finish-btn" id="finishWorkout">Finalizar treino</button>
+    </section>
+
+    <section id="historyView" class="view">
+      <div class="page-heading"><p class="eyebrow">CONSISTÊNCIA</p><h1>Histórico</h1><p class="muted">Veja seus treinos e recordes.</p></div>
+      <div id="historyList" class="history-list"></div>
+      <div class="section-heading"><h2>Evolução por exercício</h2></div>
+      <label class="field-label" for="progressExercise">Exercício</label>
+      <select id="progressExercise" class="field"></select>
+      <div class="chart-card"><div id="progressSummary" class="muted small">Registre treinos para visualizar sua evolução.</div><canvas id="progressChart" height="190"></canvas></div>
+    </section>
+
+    <section id="manageView" class="view">
+      <div class="page-heading"><p class="eyebrow">PERSONALIZE</p><h1>Treinos e exercícios</h1><p class="muted">Ajuste sua ficha conforme evoluir.</p></div>
+      <div id="manageWorkouts"></div>
+      <button class="secondary-btn full" id="manageAddWorkout">＋ Criar treino</button>
+    </section>
+
+    <section id="settingsView" class="view">
+      <div class="page-heading"><p class="eyebrow">SEUS DADOS</p><h1>Configurações</h1><p class="muted">Tudo fica armazenado neste dispositivo.</p></div>
+      <div class="settings-card">
+        <h3>Backup</h3><p class="muted small">Exporte um arquivo para guardar seus treinos ou transferi-los para outro celular.</p>
+        <button class="secondary-btn full" id="exportBtn">↓ Exportar backup JSON</button>
+        <label class="secondary-btn full file-label">↑ Importar backup JSON<input id="importFile" type="file" accept="application/json"></label>
+      </div>
+      <div class="settings-card">
+        <h3>Descanso entre séries</h3><p class="muted small">Tempo padrão do cronômetro.</p>
+        <select id="restDefault" class="field"><option value="45">45 segundos</option><option value="60">60 segundos</option><option value="90" selected>90 segundos</option><option value="120">2 minutos</option><option value="180">3 minutos</option></select>
+      </div>
+      <div class="settings-card">
+        <h3>Armazenamento</h3><p class="muted small">Os dados são locais. Limpar os dados do navegador pode apagá-los. Faça backups regularmente.</p>
+        <button class="danger-btn full" id="resetBtn">Apagar todos os dados</button>
+      </div>
+      <p class="muted tiny center">Treino Forte · versão 1.0 · Não substitui orientação profissional.</p>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button class="tab active" data-view="homeView"><span>⌂</span>Início</button>
+    <button class="tab" data-view="historyView"><span>▤</span>Histórico</button>
+    <button class="tab" data-view="manageView"><span>＋</span>Editar ficha</button>
+  </nav>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-sheet"><div class="modal-grabber"></div><div id="modalContent"></div></div>
+  </div>
+
+  <div id="restWidget" class="rest-widget hidden">
+    <div><small>DESCANSO</small><strong id="restTime">01:30</strong></div>
+    <button id="restPause">Pausar</button><button id="restSkip">Pular</button>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="./app.js"></script>
+</body>
+</html>

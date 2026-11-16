@@ -1,0 +1,19 @@
+{
+  "name": "Treino Forte - Diário de Musculação",
+  "short_name": "Treino Forte",
+  "description": "Registre seus treinos, cargas e evolução.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101411",
+  "theme_color": "#101411",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
